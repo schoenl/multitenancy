@@ -1,6 +1,6 @@
 package com.schoenl.multitenancy.security;
 
-import com.schoenl.multitenancy.multitenancy.MultitenancyConfiguration;
+import com.schoenl.multitenancy.multitenancy.MultitenancyProperties;
 import com.schoenl.multitenancy.multitenancy.Tenant;
 import com.schoenl.multitenancy.multitenancy.TenantContextHolder;
 import jakarta.servlet.FilterChain;
@@ -17,20 +17,21 @@ import java.util.Optional;
 @Component
 public class TenantFilter extends OncePerRequestFilter {
 
-    private final static String                    TENANT_HEADER = "tenant-identifier";
-    private static final List<String>              EXCLUDED_URIS = List.of("/");
-    private final        MultitenancyConfiguration multitenancyConfiguration;
+    private final static String                 TENANT_HEADER = "tenant-identifier";
+    private static final List<String>           EXCLUDED_URIS = List.of("/");
+    private final        MultitenancyProperties multitenancyProperties;
 
-    public TenantFilter(MultitenancyConfiguration multitenancyConfiguration) {
-        this.multitenancyConfiguration = multitenancyConfiguration;
+    public TenantFilter(MultitenancyProperties multitenancyProperties) {
+        this.multitenancyProperties = multitenancyProperties;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        logger.info("TenantFilter doFilter");
         try {
             String tenantHeader = request.getHeader(TENANT_HEADER);
 
-            Optional<Tenant> optionalTenant = multitenancyConfiguration.tenants()
+            Optional<Tenant> optionalTenant = multitenancyProperties.tenants()
                     .stream()
                     .filter(tenant -> tenant.name().equals(tenantHeader))
                     .findFirst();

@@ -3,23 +3,23 @@ package com.schoenl.multitenancy.multitenancy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 public final class TenantContextHolder {
 
     private static final Logger              logger         = LoggerFactory.getLogger(TenantContextHolder.class);
-    private static final ThreadLocal<Tenant> TENANT_CONTEXT = new ThreadLocal<>();
+    private static final ThreadLocal<String> TENANT_CONTEXT = new ThreadLocal<>();
 
     private TenantContextHolder() {
     }
 
     public static void setTenant(Tenant tenant) {
-        TENANT_CONTEXT.set(tenant);
+        Objects.requireNonNull(tenant);
+        TENANT_CONTEXT.set(tenant.name());
         logger.debug("Tenant context set to {}", tenant);
     }
 
-    public static Tenant getTenant() throws IllegalStateException {
-        if (TENANT_CONTEXT.get() == null) {
-            throw new IllegalStateException("Tenant context not set");
-        }
+    public static String getTenantIdentifier() {
         return TENANT_CONTEXT.get();
     }
 

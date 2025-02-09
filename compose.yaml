@@ -3,7 +3,7 @@ services:
     image: 'postgres:latest'
     container_name: postgres
     environment:
-      - 'POSTGRES_DB=mydatabase'
+      - 'POSTGRES_DB=multitenantdb'
       - 'POSTGRES_PASSWORD=secret'
       - 'POSTGRES_USER=myuser'
     ports:

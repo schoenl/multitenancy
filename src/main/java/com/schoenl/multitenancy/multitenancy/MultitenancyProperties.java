@@ -8,5 +8,5 @@ import java.util.HashSet;
 
 @ConfigurationProperties(prefix = "multitenancy")
 @Validated
-public record MultitenancyConfiguration(@NotEmpty HashSet<Tenant> tenants) {
+public record MultitenancyProperties(@NotEmpty HashSet<Tenant> tenants) {
 }
